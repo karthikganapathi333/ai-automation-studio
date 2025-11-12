@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Automation Studio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+</head>
+
+<body>
+  <header id="header">
+    <h1>AI Automation Studio</h1>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/services">Services</a>
+      <a href="/portfolio">Portfolio</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <button id="theme-toggle">🌙</button>
+  </header>
+
+  <main class="hero" id="parallax-area">
+    <div class="hero-text">
+      <h2>We Build <span id="typed"></span></h2>
+      <p>Intelligent automation for startups and enterprises, powered by real AI innovation.</p>
+      <a href="/services" class="cta-btn">Explore Our Services</a>
+    </div>
+    <section class="about" id="about">
+  <h2>About AI Automation Studio</h2>
+  <p>We help companies transform operations using Artificial Intelligence, custom automation, and smart analytics. Our mission is to bring AI power to everyday business tasks.</p>
+  <p>Founded by passionate AI developers, our vision is to make automation accessible, transparent, and impactful.</p>
+</section>
+
+
+<button class="quote-btn" onclick="openQuoteForm()">💬 Get Free Quote</button>
+
+<div id="quote-form-container" class="quote-popup">
+  <form id="quoteForm" action="/quote" method="POST">
+    <h3>Request a Free Quote</h3>
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <input type="text" name="service" placeholder="Service Needed (e.g., Chatbot, Automation)" required>
+    <textarea name="details" rows="4" placeholder="Project Details..."></textarea>
+    <input type="submit" value="Submit Request">
+    <button type="button" onclick="closeQuoteForm()">Cancel</button>
+  </form>
+</div>
+
+<script>
+  function openQuoteForm() {
+    document.getElementById('quote-form-container').style.display = 'flex';
+  }
+  function closeQuoteForm() {
+    document.getElementById('quote-form-container').style.display = 'none';
+  }
+</script>
+
+    <div class="floating-icons">
+      <div class="icon">🤖</div>
+      <div class="icon">⚙️</div>
+      <div class="icon">🧠</div>
+      <div class="icon">💡</div>
+      <div class="icon">📊</div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 AI Automation Studio — All rights reserved.</p>
+  </footer>
+
+  <script>
+    // --- Typing effect ---
+    new Typed("#typed", {
+      strings: ["Automation Systems", "AI Chatbots", "Smart Dashboards", "Predictive Workflows"],
+      typeSpeed: 65,
+      backSpeed: 45,
+      loop: true
+    });
+
+    // --- Parallax scroll ---
+    document.addEventListener("mousemove", (e) => {
+      const area = document.getElementById("parallax-area");
+      const moveX = (e.clientX - window.innerWidth / 2) * 0.02;
+      const moveY = (e.clientY - window.innerHeight / 2) * 0.02;
+      area.style.transform = `rotateY(${moveX}deg) rotateX(${moveY}deg)`;
+    });
+
+    // --- Theme toggle ---
+    const toggleBtn = document.getElementById("theme-toggle");
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("light-mode");
+      toggleBtn.textContent = document.body.classList.contains("light-mode") ? "☀️" : "🌙";
+    });
+
+    // --- Glowing cursor effect ---
+    const glow = document.createElement("div");
+    glow.classList.add("cursor-glow");
+    document.body.appendChild(glow);
+    document.addEventListener("mousemove", (e) => {
+      glow.style.left = e.clientX + "px";
+      glow.style.top = e.clientY + "px";
+    });
+  </script>
+  <script src="https://unpkg.com/scrollreveal"></script>
+<script>
+  ScrollReveal().reveal('h2, p, .service-card, .cta-btn, form, footer', {
+    delay: 150,
+    distance: '40px',
+    origin: 'bottom',
+    duration: 1000,
+    reset: true,
+    opacity: 0
+  });
+</script>
+
+</body>
+</html>

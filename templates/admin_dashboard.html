@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - AI Automation Studio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Admin Dashboard</h1>
+    <nav>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/logout">Logout</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>📩 Contact Messages</h2>
+    <table border="1" style="width:90%; margin:auto; text-align:left;">
+      <tr><th>ID</th><th>Name</th><th>Email</th><th>Message</th></tr>
+      {% for msg in messages %}
+      <tr>
+        <td>{{msg[0]}}</td>
+        <td>{{msg[1]}}</td>
+        <td>{{msg[2]}}</td>
+        <td>{{msg[3]}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <h2 style="margin-top:50px;">💬 Quote Requests</h2>
+    <table border="1" style="width:90%; margin:auto; text-align:left;">
+      <tr><th>ID</th><th>Name</th><th>Email</th><th>Service</th><th>Details</th></tr>
+      {% for q in quotes %}
+      <tr>
+        <td>{{q[0]}}</td>
+        <td>{{q[1]}}</td>
+        <td>{{q[2]}}</td>
+        <td>{{q[3]}}</td>
+        <td>{{q[4]}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </main>
+
+  <footer>
+    <p>© 2025 AI Automation Studio Admin Panel</p>
+  </footer>
+</body>
+</html>

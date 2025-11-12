@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - AI Automation Studio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Our Portfolio</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/services">Services</a>
+            <a href="/portfolio">Portfolio</a>
+            <a href="/contact">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <p>Here are some of our recent automation projects:</p>
+        <ul>
+            <li>Social Media Automation Bot</li>
+            <li>Lead Management Dashboard</li>
+            <li>AI Customer Support Chatbot</li>
+        </ul>
+        <button class="quote-btn" onclick="openQuoteForm()">💬 Get Free Quote</button>
+
+<div id="quote-form-container" class="quote-popup">
+  <form id="quoteForm" action="/quote" method="POST">
+    <h3>Request a Free Quote</h3>
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <input type="text" name="service" placeholder="Service Needed (e.g., Chatbot, Automation)" required>
+    <textarea name="details" rows="4" placeholder="Project Details..."></textarea>
+    <input type="submit" value="Submit Request">
+    <button type="button" onclick="closeQuoteForm()">Cancel</button>
+  </form>
+</div>
+
+<script>
+  function openQuoteForm() {
+    document.getElementById('quote-form-container').style.display = 'flex';
+  }
+  function closeQuoteForm() {
+    document.getElementById('quote-form-container').style.display = 'none';
+  }
+</script>
+
+    </main>
+
+    <footer>
+        <p>© 2025 AI Automation Studio. All rights reserved.</p>
+    </footer>
+    <script src="https://unpkg.com/scrollreveal"></script>
+<script>
+  ScrollReveal().reveal('h2, p, .service-card, .cta-btn, form, footer', {
+    delay: 150,
+    distance: '40px',
+    origin: 'bottom',
+    duration: 1000,
+    reset: true,
+    opacity: 0
+  });
+</script>
+
+</body>
+</html>
