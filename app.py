@@ -3,15 +3,18 @@ from flask_mail import Mail, Message
 import sqlite3
 import os
 
+# --- 1️⃣ Create the Flask app instance first ---
 app = Flask(__name__)
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'aiautomationstudio30@gmail.com'
-app.config['MAIL_PASSWORD'] = 'vnwrjfeadeoaeioi'
-app.config['MAIL_DEFAULT_SENDER'] = ('AI Automation Studio', 'YOUR_EMAIL@gmail.com')
+
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'smtp.gmail.com')
+app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 587))
+app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'True') == 'True'
+app.config['MAIL_USERNAME'] = os.getenv('aiautomationstudio30@gmail.com')
+app.config['MAIL_PASSWORD'] = os.getenv('vnwrjfeadeoaeioi')
+app.config['MAIL_DEFAULT_SENDER'] = ('AI Automation Studio', app.config['MAIL_USERNAME'])
 
 mail = Mail(app)
+
 
 app.secret_key = "aistudio_secret"
 
@@ -105,6 +108,10 @@ def start_project():
         flash("✅ Project request submitted successfully! We'll contact you soon.")
         return redirect('/start_project')
     return render_template('start_project.html')
+
+@app.route('/ping')
+def ping():
+    return "✅ Server running fine!"
 
 if __name__ == '__main__':
     app.run(debug=True)
