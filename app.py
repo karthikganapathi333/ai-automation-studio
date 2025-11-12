@@ -70,5 +70,41 @@ def quote():
 
     return redirect('/')
 
+@app.route('/start_project', methods=['GET', 'POST'])
+def start_project():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        company = request.form['company']
+        service = request.form['service']
+        budget = request.form['budget']
+        details = request.form['details']
+
+        with sqlite3.connect("messages.db") as conn:
+            conn.execute('''CREATE TABLE IF NOT EXISTS projects
+                         (id INTEGER PRIMARY KEY, name TEXT, email TEXT, company TEXT, service TEXT, budget TEXT, details TEXT)''')
+            conn.execute('INSERT INTO projects (name, email, company, service, budget, details) VALUES (?, ?, ?, ?, ?, ?)',
+                         (name, email, company, service, budget, details))
+
+        # send notification email
+        msg = Message(
+            subject=f"🚀 New Project Request from {name}",
+            recipients=['YOUR_EMAIL@gmail.com'],  # change this to your receiving Gmail
+            body=f"Name: {name}\nEmail: {email}\nCompany: {company}\nService: {service}\nBudget: {budget}\n\nDetails:\n{details}"
+        )
+        mail.send(msg)
+
+        # auto-reply to client
+        client_reply = Message(
+            subject="🎯 Thanks for contacting AI Automation Studio!",
+            recipients=[email],
+            body=f"Hey {name},\n\nThanks for reaching out to AI Automation Studio! 🎉\nWe’ve received your project details and our team will get back to you soon.\n\n— Team AI Automation Studio"
+        )
+        mail.send(client_reply)
+
+        flash("✅ Project request submitted successfully! We'll contact you soon.")
+        return redirect('/start_project')
+    return render_template('start_project.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

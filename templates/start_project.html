@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Start Your Project - AI Automation Studio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="AI Automation Studio Logo" style="height:60px;">
+    <h1>Start Your Project</h1>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/services">Services</a>
+      <a href="/portfolio">Portfolio</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>🚀 Let’s Build Something Intelligent Together</h2>
+    <form action="/start_project" method="POST" style="max-width:500px; margin:auto;">
+      <input type="text" name="name" placeholder="Your Name" required>
+      <input type="email" name="email" placeholder="Your Email" required>
+      <input type="text" name="company" placeholder="Company / Brand (optional)">
+      <input type="text" name="service" placeholder="Service Needed (e.g. Chatbot, Automation, Dashboard)" required>
+      <select name="budget" required>
+        <option value="">Budget Range</option>
+        <option value="Below ₹20,000">Below ₹20,000</option>
+        <option value="₹20,000 - ₹50,000">₹20,000 - ₹50,000</option>
+        <option value="₹50,000 - ₹1,00,000">₹50,000 - ₹1,00,000</option>
+        <option value="Above ₹1,00,000">Above ₹1,00,000</option>
+      </select>
+      <textarea name="details" rows="5" placeholder="Describe your project in a few lines..." required></textarea>
+      <input type="submit" value="Submit Project Request">
+    </form>
+  </main>
+
+  <footer>
+    <p>© 2025 AI Automation Studio. All rights reserved.</p>
+  </footer>
+</body>
+</html>
