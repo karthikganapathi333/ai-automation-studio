@@ -4,6 +4,10 @@ import sqlite3
 app = Flask(__name__)
 app.secret_key = "admin_secret_key"
 
+@app.route('/')
+def home_redirect():
+    return redirect('/admin')
+
 # --- ADMIN LOGIN PAGE ---
 @app.route('/admin', methods=['GET', 'POST'])
 def admin_login():
