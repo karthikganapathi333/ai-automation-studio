@@ -377,10 +377,3 @@ body.light-mode #theme-toggle {
   max-width: 800px;
   margin: auto;
 }
-.no-link-style {
-  text-decoration: none;
-  color: inherit;
-}
-.no-link-style:hover {
-  color: inherit;
-}
