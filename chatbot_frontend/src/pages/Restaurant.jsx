@@ -3,7 +3,7 @@ import ChatTemplate from "../components/ChatTemplate";
 export default function Restaurant() {
   return (
     <ChatTemplate
-      apiEndpoint="http://127.0.0.1:5002/api/restaurant/chat"
+      apiEndpoint="/chatbot_api_proxy/api/restaurant/chat"
       headerTitle="Restaurant Assistant"
       routeName="Restaurant"
       suggestions={[

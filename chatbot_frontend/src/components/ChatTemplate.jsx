@@ -1,4 +1,3 @@
-// chatbot_frontend/src/components/ChatTemplate.jsx
 import { useEffect, useRef, useState } from "react";
 import "../chatbot.css";
 
@@ -15,12 +14,9 @@ export default function ChatTemplate({
   const [loading, setLoading] = useState(false);
   const messagesRef = useRef();
 
-  // ------------------------------
-  // AUTO-CREATE CHAT WHEN PAGE OPENS
-  // ------------------------------
   useEffect(() => {
     fetchChats().then(() => {
-      createNewChat();  // start new chat automatically
+      createNewChat();
     });
   }, []);
 
@@ -29,20 +25,14 @@ export default function ChatTemplate({
       messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
   }, [messages]);
 
-  // ------------------------------
-  // FETCH CHAT LIST
-  // ------------------------------
   async function fetchChats() {
-    const res = await fetch("http://127.0.0.1:5002/api/chat/list");
+    const res = await fetch("/chatbot_api_proxy/api/chat/list");
     const data = await res.json();
     setChats(data.chats || []);
   }
 
-  // ------------------------------
-  // CREATE NEW CHAT
-  // ------------------------------
   async function createNewChat() {
-    const res = await fetch("http://127.0.0.1:5002/api/chat/new", {
+    const res = await fetch("/chatbot_api_proxy/api/chat/new", {
       method: "POST",
     });
     const data = await res.json();
@@ -53,15 +43,12 @@ export default function ChatTemplate({
     }
   }
 
-  // ------------------------------
-  // LOAD A CHAT
-  // ------------------------------
   async function selectChat(chatId) {
     setActiveChat(null);
     setMessages([]);
 
     const res = await fetch(
-      `http://127.0.0.1:5002/api/chat/${chatId}/messages`
+      `/chatbot_api_proxy/api/chat/${chatId}/messages`
     );
     const data = await res.json();
 
@@ -78,9 +65,6 @@ export default function ChatTemplate({
     );
   }
 
-  // ------------------------------
-  // SEND MESSAGE FUNCTION
-  // ------------------------------
   async function sendMessage(text) {
     if (!text.trim() || !activeChat) return;
 
@@ -103,10 +87,9 @@ export default function ChatTemplate({
 
       setMessages((prev) => [...prev, { from: "bot", text: reply }]);
 
-      // Generate chat title for first message
       const currentChat = chats.find((c) => c.id === activeChat.id);
       if (currentChat && currentChat.title === "New Chat") {
-        await fetch("http://127.0.0.1:5002/api/chat/title", {
+        await fetch("/chatbot_api_proxy/api/chat/title", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -128,7 +111,6 @@ export default function ChatTemplate({
 
   return (
     <div className="chat-wrapper">
-      {/* LEFT SIDEBAR */}
       <aside className="chat-sidebar">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <strong style={{ fontSize: 18 }}>{routeName}</strong>
@@ -175,7 +157,6 @@ export default function ChatTemplate({
         </div>
       </aside>
 
-      {/* MAIN CHAT PANEL */}
       <section className="chat-panel">
         <div className="panel-header">
           <div>
@@ -184,7 +165,6 @@ export default function ChatTemplate({
           </div>
         </div>
 
-        {/* SUGGESTIONS ONLY WHEN EMPTY */}
         {messages.length === 0 && (
           <div style={{ display: "flex", gap: 12, margin: "16px 0" }}>
             {suggestions.map((s, i) => (
@@ -213,7 +193,6 @@ export default function ChatTemplate({
           </div>
         )}
 
-        {/* MESSAGES */}
         <div className="messages" ref={messagesRef}>
           {messages.map((m, i) => (
             <div key={i} className={`msg ${m.from}`}>
@@ -229,7 +208,6 @@ export default function ChatTemplate({
           ))}
         </div>
 
-        {/* INPUT */}
         <div className="input-area">
           <input
             placeholder={`Ask the ${headerTitle}...`}

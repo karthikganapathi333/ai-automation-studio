@@ -313,6 +313,27 @@ def chatbot_root():
 def chatbot_assets(filename):
     return app.send_static_file(f'chatbot/assets/{filename}')
 
+# --------------------------------------------
+# PROXY CHATBOT API ROUTES  (Required for Render)
+# --------------------------------------------
+import requests
+
+CHATBOT_API_URL = "http://127.0.0.1:5002"
+
+@app.route("/chatbot_api_proxy/<path:path>", methods=["GET", "POST"])
+def chatbot_api_proxy(path):
+    url = f"{CHATBOT_API_URL}/{path}"
+
+    try:
+        if request.method == "POST":
+            resp = requests.post(url, json=request.get_json())
+        else:
+            resp = requests.get(url, params=request.args)
+
+        return (resp.text, resp.status_code, resp.headers.items())
+
+    except Exception as e:
+        return {"error": "proxy_failed", "details": str(e)}, 500
 
 # -------------------------
 # End chatbot integration

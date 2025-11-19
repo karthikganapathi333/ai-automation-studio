@@ -3,7 +3,7 @@ import ChatTemplate from "../components/ChatTemplate";
 export default function FitnessCoach() {
   return (
     <ChatTemplate
-      apiEndpoint="http://127.0.0.1:5002/api/fitness-coach/chat"
+      apiEndpoint="/chatbot_api_proxy/api/fitness-coach/chat"
       headerTitle="Fitness Coach"
       routeName="Fitness Coach"
       suggestions={[

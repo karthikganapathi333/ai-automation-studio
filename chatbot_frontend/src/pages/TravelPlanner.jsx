@@ -3,7 +3,7 @@ import ChatTemplate from "../components/ChatTemplate";
 export default function TravelPlanner() {
   return (
     <ChatTemplate
-      apiEndpoint="http://127.0.0.1:5002/api/travel-planner/chat"
+      apiEndpoint="/chatbot_api_proxy/api/travel-planner/chat"
       headerTitle="Travel Planner"
       routeName="Travel Planner"
       suggestions={[

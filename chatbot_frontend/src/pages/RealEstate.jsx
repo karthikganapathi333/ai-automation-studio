@@ -3,7 +3,7 @@ import ChatTemplate from "../components/ChatTemplate";
 export default function RealEstate() {
   return (
     <ChatTemplate
-      apiEndpoint="http://127.0.0.1:5002/api/real-estate/chat"
+      apiEndpoint="/chatbot_api_proxy/api/real-estate/chat"
       headerTitle="Real Estate Assistant"
       routeName="Real Estate"
       suggestions={[
