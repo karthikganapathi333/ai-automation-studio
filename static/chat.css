@@ -1,0 +1,379 @@
+/* =====================================================
+   static/chat.css - DARK CHAT UI + MULTI-THEME SUPPORT
+   ===================================================== */
+
+:root {
+  --bg: #0f1416;
+  --panel: #111417;
+  --muted: #9aa4a6;
+  --accent: #1db954; /* default neon-green */
+}
+
+/* GLOBAL */
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: var(--bg);
+  color: #e6eef0;
+}
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ============================
+        SIDEBAR (LEFT)
+   ============================ */
+.sidebar {
+  width: 300px;
+  background: #0c0f10;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 16px;
+  box-sizing: border-box;
+  transition: 0.25s ease;
+}
+
+/* Sidebar hover glow */
+.sidebar:hover {
+  box-shadow: 0 0 14px rgba(0, 255, 150, 0.2);
+}
+
+.sidebar-top {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.new-chat {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.new-chat:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.threads-list {
+  margin-top: 12px;
+  overflow: auto;
+  max-height: 75vh;
+}
+
+.thread-item {
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.thread-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.thread-title {
+  font-weight: 600;
+  color: #eaeaea;
+}
+
+/* ============================
+          MAIN CHAT AREA
+   ============================ */
+.main-chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  padding: 24px 32px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.hero {
+  padding: 24px 32px;
+  text-align: center;
+}
+
+.hero h2 {
+  font-size: 28px;
+  margin-bottom: 8px;
+  color: #fff;
+}
+
+.hero p {
+  color: #c3c8cb;
+  margin: 0;
+}
+
+/* ============================
+            MESSAGES
+   ============================ */
+.messages {
+  flex: 1;
+  padding: 20px 32px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.empty-state {
+  opacity: 0.6;
+  text-align: center;
+  padding: 40px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.message-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.message {
+  max-width: 70%;
+  padding: 14px;
+  border-radius: 14px;
+  line-height: 1.4;
+  animation: fadeIn 0.25s ease;
+}
+
+/* User ↔ Bot alignment FIXED */
+.from-user {
+  justify-content: flex-end !important;
+  text-align: right;
+}
+
+.from-assistant {
+  justify-content: flex-start !important;
+  text-align: left;
+}
+
+.from-user .message {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border-bottom-right-radius: 2px;
+}
+
+.from-assistant .message {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  border-bottom-left-radius: 2px;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(5px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+/* TYPING INDICATOR */
+.typing-indicator {
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.typing-indicator span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  margin-right: 4px;
+  animation: blink 1.4s infinite both;
+}
+
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink {
+  0% {opacity: .2;}
+  20% {opacity: 1;}
+  100% {opacity: .2;}
+}
+
+
+/* ============================
+           COMPOSER BOX
+   ============================ */
+.composer {
+  display: flex;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  backdrop-filter: blur(6px);
+}
+
+#composer-input {
+  flex: 1;
+  border-radius: 12px;
+  padding: 12px;
+  resize: none;
+  background: #0d1214;
+  color: #e6eef0;
+  border: 1px solid rgba(255,255,255,0.07);
+}
+
+#send-btn {
+  width: 56px;
+  border-radius: 12px;
+  border: none;
+  background: var(--accent);
+  color: #04110a;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* =====================================================
+     THEME BACKGROUNDS — EMBEDDED SVG (no images needed)
+   ===================================================== */
+
+/* 🏡 Real Estate */
+.chat-theme-real-estate {
+  --accent:#2b9bd3;
+  background:
+    linear-gradient(135deg, rgba(10,18,22,0.85), rgba(15,31,43,0.85)),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'><rect width='100%' height='100%' fill='%230a1216'/><path d='M0 400 L200 310 L350 350 L500 270 L650 330 L800 260 L800 600 L0 600 Z' fill='%23172a36' opacity='0.45'/></svg>");
+  background-size: cover;
+}
+
+/* 🎓 Student Mentor */
+.chat-theme-student-mentor {
+  --accent:#1fd65f;
+  background:
+    linear-gradient(135deg, rgba(10,20,12,0.85), rgba(16,41,26,0.85)),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'><rect width='100%' height='100%' fill='%230c1e14'/><circle cx='260' cy='320' r='120' fill='%231fd65f' opacity='0.08'/></svg>");
+  background-size: cover;
+}
+
+/* 💪 Fitness */
+.chat-theme-fitness-coach {
+  --accent:#ff5a5f;
+  background:
+    linear-gradient(135deg, rgba(32,12,12,0.85), rgba(90,18,18,0.85)),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'><rect width='100%' height='100%' fill='%23180c0c'/><circle cx='580' cy='300' r='140' fill='%23ff5a5f' opacity='0.08'/></svg>");
+  background-size: cover;
+}
+
+/* 🍽 Restaurant */
+.chat-theme-restaurant {
+  --accent:#ff9f43;
+  background:
+    linear-gradient(135deg, rgba(42,16,8,0.85), rgba(110,45,14,0.85)),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'><rect width='100%' height='100%' fill='%23271309'/><circle cx='300' cy='350' r='130' fill='%23ff9f43' opacity='0.07'/></svg>");
+  background-size: cover;
+}
+
+/* ✈ Travel Planner */
+.chat-theme-travel-planner {
+  --accent:#24a6d9;
+  background:
+    linear-gradient(135deg, rgba(10,25,55,0.85), rgba(21,74,115,0.85)),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'><rect width='100%' height='100%' fill='%23121f3c'/><circle cx='650' cy='230' r='140' fill='%2324a6d9' opacity='0.08'/></svg>");
+  background-size: cover;
+}
+
+/* =====================================================
+         MOBILE RESPONSIVE (PERFECT)
+   ===================================================== */
+
+@media (max-width: 900px) {
+  .sidebar { display:none; }
+}
+
+@media (max-width: 768px) {
+
+  .main-chat {
+    width: 100%;
+    padding: 0;
+  }
+
+  .messages {
+    padding: 12px 16px;
+  }
+
+  .message {
+    max-width: 85%;
+    font-size: 15px;
+  }
+
+  #composer-input {
+    font-size: 15px;
+    padding: 10px;
+  }
+
+  #send-btn {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+
+  .chat-header {
+    padding: 14px 20px;
+    text-align: center;
+  }
+
+  .hero h2 { font-size: 22px; }
+  .hero p { font-size: 14px; }
+
+  /* Sidebar slide-out */
+  .mobile-sidebar-btn {
+    display:block;
+  }
+
+  .sidebar {
+    position:fixed;
+    top:0;
+    left:-310px;
+    height:100%;
+    z-index:9999;
+    transition:0.3s ease;
+  }
+
+  .sidebar.sidebar-open {
+    left:0;
+  }
+}
+
+/* Sidebar toggle button */
+.mobile-sidebar-btn {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  padding: 10px 14px;
+  font-size: 22px;
+  border-radius: 10px;
+  z-index: 10000;
+  cursor: pointer;
+}
+
+/* =====================================================
+   AI CHATBOTS PAGE - FIX LINK COLOR (WHITE)
+   ===================================================== */
+
+.services-container a.no-link-style,
+.services-container a.no-link-style h3,
+.services-container a.no-link-style p {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+.service-card h3,
+.service-card p {
+  color: #ffffff !important;
+}

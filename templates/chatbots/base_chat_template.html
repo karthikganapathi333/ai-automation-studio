@@ -1,0 +1,176 @@
+<!-- templates/chatbots/base_chat_template.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{{ bot_title }} - AI Automation Studio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
+</head>
+<body class="chat-theme-{{ theme }}">
+    <button id="open-sidebar" class="mobile-sidebar-btn">☰</button>
+  <div class="app-shell">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <button id="new-chat-btn" class="new-chat">+ New Chat</button>
+        <h3>{{ bot_title }}</h3>
+      </div>
+      <div id="threads-list" class="threads-list">
+        <!-- Threads loaded by JS -->
+      </div>
+    </aside>
+
+    <!-- MAIN CHAT AREA -->
+    <main class="main-chat">
+      <header class="chat-header">
+        <div class="chat-title">{{ bot_title }}</div>
+      </header>
+
+      <section class="hero">
+        <h2 id="hero-title">How can I help you today?</h2>
+        <p id="hero-sub">Ask me anything — I will reply with friendly, professional answers (with emojis).</p>
+      </section>
+
+      <section id="messages" class="messages">
+        <!-- messages will be appended here by JS -->
+        <div class="empty-state">Start a conversation — click "New Chat" or choose a thread from the left.</div>
+      </section>
+
+      <footer class="composer">
+        <textarea id="composer-input" placeholder="Ask anything..." rows="1"></textarea>
+        <button id="send-btn" title="Send">➤</button>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const BOT_KEY = "{{ bot_key }}";
+    // helper: fetch threads
+    async function loadThreads() {
+      const res = await fetch(`/api/threads/${BOT_KEY}`);
+      const threads = await res.json();
+      const list = document.getElementById('threads-list');
+      list.innerHTML = '';
+      threads.forEach(t => {
+        const el = document.createElement('div');
+        el.className = 'thread-item';
+        el.dataset.id = t.id;
+        el.innerHTML = `<div class="thread-title">${t.title}</div><div class="thread-meta">${t.created_at}</div>`;
+        el.onclick = () => openThread(t.id);
+        list.appendChild(el);
+      });
+    }
+
+    async function createThread() {
+      const res = await fetch('/api/create_thread', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({bot_key: BOT_KEY, title: "New chat"})
+      });
+      const data = await res.json();
+      await loadThreads();
+      openThread(data.thread_id);
+    }
+
+    let currentThreadId = null;
+
+    async function openThread(id) {
+      currentThreadId = id;
+      // load messages
+      const res = await fetch(`/api/thread/${id}/messages`);
+      const msgs = await res.json();
+      renderMessages(msgs);
+    }
+
+    function renderMessages(msgs) {
+      const container = document.getElementById('messages');
+      container.innerHTML = '';
+      if (!msgs.length) {
+        container.innerHTML = '<div class="empty-state">This chat is empty. Say hi 👋</div>';
+        return;
+      }
+      msgs.forEach(m => {
+        const el = document.createElement('div');
+        el.className = 'message ' + (m.role === 'user' ? 'from-user' : 'from-assistant');
+        el.innerHTML = `<div class="message-content">${m.content}</div><div class="message-meta">${m.created_at||''}</div>`;
+        container.appendChild(el);
+      });
+      // scroll bottom
+      container.scrollTop = container.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('composer-input');
+      const text = input.value.trim();
+      if (!text) return;
+      // Optimistic UI: append user message locally
+      if (!currentThreadId) {
+        // create a thread first
+        const res = await fetch('/api/create_thread', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({bot_key: BOT_KEY, title: text.slice(0,60)})
+        });
+        const data = await res.json();
+        currentThreadId = data.thread_id;
+        await loadThreads();
+      }
+      // append user message to UI
+      const container = document.getElementById('messages');
+      const userEl = document.createElement('div');
+      userEl.className = 'message from-user';
+      userEl.innerHTML = `<div class="message-content">${escapeHtml(text)}</div>`;
+      container.appendChild(userEl);
+      container.scrollTop = container.scrollHeight;
+      input.value = '';
+
+      // call server
+      const resp = await fetch('/ask_bot', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({thread_id: currentThreadId, bot: BOT_KEY, message: text})
+      });
+      const j = await resp.json();
+      if (j.reply) {
+        const botEl = document.createElement('div');
+        botEl.className = 'message from-assistant';
+        botEl.innerHTML = `<div class="message-content">${j.reply}</div>`;
+        container.appendChild(botEl);
+        container.scrollTop = container.scrollHeight;
+        // refresh threads list to show updated order
+        await loadThreads();
+      } else {
+        alert('Error sending message');
+      }
+    }
+
+    function escapeHtml(unsafe) {
+      return unsafe.replace(/[&<"'>]/g, function(m) {
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m];
+      });
+    }
+
+    // UI wiring
+    document.getElementById('new-chat-btn').addEventListener('click', createThread);
+    document.getElementById('send-btn').addEventListener('click', sendMessage);
+    document.getElementById('composer-input').addEventListener('keydown', function(e){
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    // initial load
+    loadThreads();
+  </script>
+  <script>
+  const sidebar = document.querySelector(".sidebar");
+  const openBtn = document.getElementById("open-sidebar");
+
+  openBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("sidebar-open");
+  });
+</script>
+</body>
+</html>
